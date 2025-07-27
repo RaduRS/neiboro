@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Project: Neiboro
+Website: neiboro.co.uk
 
-## Getting Started
+Core Concept
+Neoboro is a hyper-local, private mutual aid platform designed as a Progressive Web App (PWA). It connects a specific "neighborhood cluster" (e.g., 2-4 streets), serving as a digital bulletin board where neighbors can post "Offers" of help and "Requests" for assistance.
 
-First, run the development server:
+The core mission is to foster a high-trust community of solidarity and direct support by providing a simple, secure, and exclusive space for neighbors to connect.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Technology Stack
+The platform is built on a modern, robust, and scalable technology stack:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Framework: Next.js – For a fast, server-rendered React application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+UI Components: shadcn/ui – For a set of beautifully designed, accessible, and composable components built on top of Tailwind CSS.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Authentication: Clerk – To handle user sign-up, sign-in, and profile management with pre-built, secure UI components.
 
-## Learn More
+Backend & Database: Supabase – For the PostgreSQL database, real-time subscriptions (powering the live bulletin board), and user data storage.
 
-To learn more about Next.js, take a look at the following resources:
+Key Features
+Progressive Web App (PWA): Installable on any device (iOS, Android, desktop) with an icon on the home screen for an app-like experience.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Real-Time Bulletin Board: A live feed of offers and requests that updates automatically without needing a page refresh.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Push Notifications: To alert users to new activity and keep the community engaged.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Neighborhood Cluster Exclusivity: User registration is verified by address to ensure the platform remains a private and trusted space for a specific neighborhood.
