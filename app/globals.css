@@ -5,6 +5,7 @@
 
 body {
   font-family: system-ui, -apple-system, sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
 
 @theme inline {
@@ -112,6 +113,10 @@ body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+.scroll-smooth {
+  scroll-behavior: smooth;
 }
 
 @layer base {
