@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import HomeHeader from '@/components/HomeHeader';
 import HomeContent from '@/components/HomeContent';
-import { UserService } from '@/lib/user-service';
 
 export default function Home() {
   const { user, isLoaded } = useUser();
@@ -21,13 +20,20 @@ export default function Home() {
       
       const checkUserStatus = async () => {
         try {
-          const existingUser = await UserService.getByClerkId(user.id);
+          const response = await fetch('/api/users/me');
           
-          if (existingUser?.address_line1 && existingUser?.city && existingUser?.cluster_id) {
-            // User has complete address setup, go to neighborhood
-            router.push('/neighborhood');
+          if (response.ok) {
+            const { user: existingUser } = await response.json();
+            
+            if (existingUser?.address_line1 && existingUser?.city && existingUser?.cluster_id) {
+              // User has complete address setup, go to neighborhood
+              router.push('/neighborhood');
+            } else {
+              // User needs to set up address
+              router.push('/address');
+            }
           } else {
-            // User needs to set up address
+            // User doesn't exist yet, redirect to address setup
             router.push('/address');
           }
         } catch (error) {

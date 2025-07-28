@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
-import { UserService } from '@/lib/user-service';
 import { ClusterService } from '@/lib/cluster-service';
 import AddressInput from '@/components/AddressInput';
 import { formatPostcode } from '@/lib/postcode-utils';
@@ -29,9 +28,12 @@ export default function AddressPage() {
     // Check if user already has an address
     const checkExistingUser = async () => {
       try {
-        const existingUser: User | null = await UserService.getByClerkId(user.id);
-        if (existingUser?.address_line1 && existingUser?.city) {
-          router.push('/neighborhood');
+        const response = await fetch('/api/users/me');
+        if (response.ok) {
+          const { user: existingUser } = await response.json();
+          if (existingUser?.address_line1 && existingUser?.city) {
+            router.push('/neighborhood');
+          }
         }
       } catch (error) {
         console.error('Error checking existing user:', error);
@@ -65,20 +67,13 @@ export default function AddressPage() {
 
     setIsLoading(true);
     try {
-      // Check if user exists, if not create them, otherwise update
-      const existingUser = await UserService.getByClerkId(user.id);
-      
-      if (existingUser) {
-        // Update existing user with address and cluster
-        await UserService.update(user.id, {
-          address_line1: selectedAddress.address,
-          city: selectedAddress.city,
-          cluster_id: availableCluster.id,
-        });
-      } else {
-        // Create new user with address and cluster
-        await UserService.create({
-          clerk_id: user.id,
+      // Update or create user with address and cluster via API
+      const response = await fetch('/api/users/me', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           email: user.emailAddresses[0]?.emailAddress || '',
           first_name: user.firstName || '',
           last_name: user.lastName || '',
@@ -86,7 +81,11 @@ export default function AddressPage() {
           address_line1: selectedAddress.address,
           city: selectedAddress.city,
           cluster_id: availableCluster.id,
-        });
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to join cluster');
       }
       
       router.push('/neighborhood');

@@ -1,7 +1,7 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { UserService } from "@/lib/user-service";
+import { UserServiceAdmin } from "@/lib/user-service-admin";
 import { ClerkWebhookEvent } from "@/lib/types";
 
 export async function POST(req: Request) {
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
       // Check if user already exists by clerkId
       let existingUser;
       try {
-        existingUser = await UserService.getByClerkId(clerkId);
+        existingUser = await UserServiceAdmin.getByClerkId(clerkId);
       } catch (error) {
         console.error("Error checking existing user:", error);
         // If we can't check for existing user, assume they don't exist
@@ -78,7 +78,7 @@ export async function POST(req: Request) {
         // Only update users that already exist
         if (type === "user.updated") {
           try {
-            await UserService.update(clerkId, {
+            await UserServiceAdmin.update(clerkId, {
               first_name: first_name || existingUser.first_name || undefined,
               last_name: last_name || existingUser.last_name || undefined,
               profile_image_url: image_url || existingUser.profile_image_url || undefined,
@@ -93,7 +93,7 @@ export async function POST(req: Request) {
         // Create new user only for user.created events
         if (type === "user.created") {
           try {
-            await UserService.create({
+            await UserServiceAdmin.create({
               clerk_id: clerkId,
               email,
               first_name: first_name || "",
@@ -119,7 +119,7 @@ export async function POST(req: Request) {
     const { id: clerkId } = data;
 
     try {
-      await UserService.delete(clerkId);
+      await UserServiceAdmin.delete(clerkId);
       return NextResponse.json({ success: true });
     } catch (error) {
       console.error("Error deleting user:", error);

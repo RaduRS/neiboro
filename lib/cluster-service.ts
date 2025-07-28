@@ -72,12 +72,21 @@ export class ClusterService {
   }
 
   // Create a new cluster (admin only)
-  static async create(clusterData: { postcode: string; area_name: string }): Promise<Cluster> {
+  static async create(clusterData: { 
+    postcode: string; 
+    area_name: string;
+    city?: string;
+    county?: string;
+    country?: string;
+  }): Promise<Cluster> {
     const { data, error } = await supabase
       .from('clusters')
       .insert({
         postcode: clusterData.postcode,
-        area_name: clusterData.area_name
+        area_name: clusterData.area_name,
+        city: clusterData.city,
+        county: clusterData.county,
+        country: clusterData.country || 'United Kingdom'
       })
       .select('*')
       .single();
@@ -90,12 +99,21 @@ export class ClusterService {
   }
 
   // Update cluster (admin only)
-  static async update(id: string, clusterData: { postcode?: string; area_name?: string }): Promise<Cluster> {
+  static async update(id: string, clusterData: { 
+    postcode?: string; 
+    area_name?: string;
+    city?: string;
+    county?: string;
+    country?: string;
+  }): Promise<Cluster> {
     const { data, error } = await supabase
       .from('clusters')
       .update({
         postcode: clusterData.postcode,
-        area_name: clusterData.area_name
+        area_name: clusterData.area_name,
+        city: clusterData.city,
+        county: clusterData.county,
+        country: clusterData.country
       })
       .eq('id', id)
       .select('*')
